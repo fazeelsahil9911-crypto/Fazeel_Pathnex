@@ -1,0 +1,75 @@
+---
+- name: Test Connectivity to all hosts
+  hosts: all
+  gathner_facts: no
+  tasks: 
+    - name: Ping all hosts
+      ansible.builtin.ping:
+# Practice: Ensure your inventory is set up and all hosts respond.
+--------------------------------------------------------------------------
+---
+- name: Install packages on target hosts
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install Apache and Git
+      ansible.builtin.package:
+        name:
+          - httpd
+          - git
+        state: present
+# Practive: try swtiching state: present to state: absent to remove packages.
+---
+- name: Manage users
+  hosts: all
+  become: yes
+  tasks:
+    - name: Create a new user
+      ansible.builtin.user:
+        name: practiceuser
+        comment: "This is a practice user"
+        shell: /bin/bash
+        state: present
+# Practice: Add multiple users using a loop.
+
+---
+- name: Deploy configuration file
+  hosts: all
+  become: yes
+  tasks:
+    - name: Copy custom config file
+      ansible.builtin.copy:
+        src: ./files/sample.conf
+        dest: /etc/sample.conf
+        owner: root
+        group: root
+        mode: '0644'
+Practice: Use template instead of copy with Jinja2 variables 
+---
+- name: Manage services
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure Apache is running
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: yes
+# Practice: Stop and disable a service, then check status with Ansible.
+
+---
+- name: Install multiple packages using variables
+  hosts: all
+  become: yes
+  vars:
+    packages_to_install:
+      - vim
+      - wget
+      - curl
+  tasks:
+    - name: Install packages
+      ansible.builtin.package:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ packages_to_install }}"
+# Practice: Change it to remove all listed packages using state: absent 
